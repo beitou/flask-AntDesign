@@ -1,0 +1,17 @@
+CREATE TABLE `insurance_jira_data` (
+  `id` varchar(48) NOT NULL COMMENT 'jira ID',
+  `business` varchar(48) DEFAULT NULL COMMENT '业务线',
+  `endpoint` varchar(48) DEFAULT NULL COMMENT '模块',
+  `sprint` varchar(48) DEFAULT NULL COMMENT 'Sprint',
+  `summary` varchar(1024) DEFAULT NULL COMMENT 'Jira标题',
+  `priority` varchar(48) DEFAULT NULL COMMENT '问题等级',
+  `status` varchar(48) DEFAULT NULL COMMENT '问题状态',
+  `reporter_name` varchar(48) DEFAULT NULL COMMENT 'QA负责人拼音',
+  `reporter_display_name` varchar(48) DEFAULT NULL COMMENT 'QA负责人中文',
+  `assignee_name` varchar(48) DEFAULT NULL COMMENT 'RD负责人拼音',
+  `assignee_display_name` varchar(48) DEFAULT NULL COMMENT 'RD负责人中文',
+  `created` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated` datetime DEFAULT NULL COMMENT '更新时间',
+  `url` varchar(1024) DEFAULT NULL COMMENT '问题链接',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

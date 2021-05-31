@@ -1,0 +1,47 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: SERVER_NAME
+  namespace: CI_JOB_STAGE
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: SERVER_NAME
+        version: v1
+    spec:
+      containers:
+      - name: SERVER_NAME
+        image: harbor.xiaobangtouzi.com/qa/quality:CI_IMAGE_TAG
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: RUNTIME_ENV
+          value: "CI_JOB_STAGE"
+        - name: APP_NAME
+          value: "SERVER_NAME"
+      imagePullSecrets:
+        - name: harbor-secret
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: SERVER_NAME
+  namespace: CI_JOB_STAGE
+  labels:
+    app: SERVER_NAME
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    name: http
+    targetPort: 5000
+    port: 5000
+    nodePort: 30080
+  selector:
+    app: SERVER_NAME
+

@@ -1,0 +1,9 @@
+CREATE TABLE `phone_rent_record` (
+  `id` varchar(48) NOT NULL COMMENT '主键ID',
+  `phone_id` int(11) NOT NULL COMMENT '手机ID',
+  `borrow_people_id` varchar(48) DEFAULT NULL COMMENT '借用人ID',
+  `apply_time` datetime NOT NULL COMMENT '申请时间',
+  `borrow_time` datetime NOT NULL COMMENT '借用时间',
+  `status` int(11) NOT NULL COMMENT '0:无借用人，1:审批中，2:有借用人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

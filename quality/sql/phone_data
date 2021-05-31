@@ -1,0 +1,17 @@
+CREATE TABLE `phone_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone_id` varchar(64) DEFAULT NULL,
+  `brand` varchar(1000) DEFAULT NULL,
+  `model` varchar(1000) DEFAULT NULL,
+  `system_version` varchar(1000) DEFAULT NULL,
+  `configuration` varchar(1000) DEFAULT NULL,
+  `number` varchar(1000) DEFAULT NULL,
+  `arrival_time` bigint(20) DEFAULT NULL,
+  `sign_people_id` varchar(1000) DEFAULT NULL,
+  `receive_people_id` varchar(1000) DEFAULT NULL,
+  `created_time` bigint(20) DEFAULT NULL,
+  `updated_time` bigint(20) DEFAULT NULL,
+  `receive_time` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_id` (`phone_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;

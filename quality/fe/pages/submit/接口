@@ -1,0 +1,43 @@
+{
+	"submiter": "",               //提测人，默认当前登陆用户，现在不能登陆先为空。
+	"project": {
+		"name": "质量平台",         //提测的项目名
+		"version": "2.1.0",        //提测的软件版本号，可以为空
+		"pm": ["wangzhaoming@xiaobangtouzi.com", "panggetao@xiaobangtouzi.com"],        //产品经理，list
+		"fe": ["wangzhaoming@xiaobangtouzi.com", "panggetao@xiaobangtouzi.com"],        //前端开发，多人时英文逗号分隔，list
+		"rd": ["wangzhaoming@xiaobangtouzi.com", "panggetao@xiaobangtouzi.com"],        //后端开发，多人时英文逗号分隔，list
+		"qa": ["wangzhaoming@xiaobangtouzi.com", "panggetao@xiaobangtouzi.com"],        //后端开发，多人时英文逗号分隔，list
+		"prd": "xxxxxxxxx",        //需求文档地址，可为空
+		"tech": "xxxxxxxxx"        //技术文档地址，可为空
+	},
+	"environment": {
+    "jira": {
+      "team": "2",             //业务团队，jira空间的board id，数字
+      "sprint": "test0103",    //业务团队，jira空间的sprint id，数字
+      "card": "CNDN-123",      //需求卡片号，字符串
+    },
+		"git": {
+      "group": "infra",        //代码库的group，可为空
+		  "repository": "user",    //代码库的repository，可为空
+      "branch": "qa",          //代码库的branch，可为空
+    },
+		"host": ""                 //测试环境地址
+	},
+	"admittance": {
+		"selftest": true,          //是否自测，可为空，布尔值
+		"testcase": "2",           //自测点，可为空
+		"smoke": "",               //是否执行冒烟，可为空
+		"influence": "2"           //影响面，可为空
+	},
+  "cc_recs": "",                //提测信息抄送给谁，这里是页面下方提测人主动填写，目前通过PRD看不能为空。
+	"cost": {
+		"fe": {
+      "start": "2019-12-10",    //FE开始开发的时间
+      "end": "2019-12-20"       //FE结束开发的时间
+    },
+    "rd": {
+      "start": "2019-12-18",   //RD开始开发的时间
+		  "end": "2019-12-28"      //RD结束开发的时间
+    }
+	}
+}

@@ -1,0 +1,19 @@
+CREATE TABLE `tb_user` (
+  `id` varchar(120) NOT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `display_name` varchar(64) DEFAULT NULL,
+  `email` varchar(120) DEFAULT NULL,
+  `department` varchar(120) DEFAULT NULL,
+  `mobile` varchar(11) DEFAULT NULL,
+  `title` varchar(64) DEFAULT NULL,
+  `role` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ix_tb_user_id` (`id`),
+  UNIQUE KEY `ix_tb_user_role` (`role`),
+  UNIQUE KEY `ix_tb_user_mobile` (`mobile`),
+  UNIQUE KEY `ix_tb_user_display_name` (`display_name`),
+  UNIQUE KEY `ix_tb_user_title` (`title`),
+  UNIQUE KEY `ix_tb_user_department` (`department`),
+  UNIQUE KEY `ix_tb_user_email` (`email`),
+  UNIQUE KEY `ix_tb_user_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

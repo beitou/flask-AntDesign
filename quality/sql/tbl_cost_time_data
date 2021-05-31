@@ -1,0 +1,13 @@
+CREATE TABLE `tbl_cost_time_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `c_qa_start` varchar(100) DEFAULT NULL,
+  `c_staging_start` varchar(100) DEFAULT NULL,
+  `c_online_start` varchar(100) DEFAULT NULL,
+  `c_qa_count` int(11) DEFAULT NULL,
+  `c_dev_time` varchar(100) DEFAULT NULL,
+  `c_create_at` datetime DEFAULT NULL,
+  `submit_data_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `submit_data_id` (`submit_data_id`),
+  CONSTRAINT `tbl_cost_time_data_ibfk_1` FOREIGN KEY (`submit_data_id`) REFERENCES `tbl_submit_data` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;

@@ -1,0 +1,23 @@
+<header>
+  <ul class="layui-nav layui-bg-blue" lay-filter="">
+    <li class="layui-nav-item layui-this"><a href="/">首页</a></li>
+    <li class="layui-nav-item"><a href="/project/index">质量数据</a></li>
+    <li class="layui-nav-item"><a href="/submit/create_summit">需求提测</a></li>
+    <li class="layui-nav-item" >
+<!--      <a href="/genesis/index">数据构造</a>-->
+      <a href="javascript:;">数据构造</a>
+      <dl class="layui-nav-child" style="z-index: 9999;"> <!-- 二级菜单 -->
+        <dd><a href="/genesis/create">创建线索</a></dd>
+        <dd><a href="/genesis/delete">删除线索</a></dd>
+      </dl>
+    </li>
+    <li class="layui-nav-item" ><a href="/treasure/index">包管理</a></li>
+  </ul>
+
+  <script>
+  layui.use('element', function(){
+    var element = layui.element;
+    element.init()
+  });
+  </script>
+</header>

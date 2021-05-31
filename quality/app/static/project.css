@@ -1,0 +1,18 @@
+
+body {
+  font-family: 'Microsoft YaHei';
+  font-size: 12px;
+}
+
+h1 {
+  text-algin: center;
+}
+
+.container {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.sonar {
+  backgroud-color: #ffffff;
+}

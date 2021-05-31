@@ -1,0 +1,19 @@
+CREATE TABLE `tbl_analysis_data` (
+  `id` varchar(32) NOT NULL COMMENT 'jira id',
+  `department` varchar(32) NOT NULL COMMENT '部门',
+  `summary` varchar(256) NOT NULL COMMENT '标题',
+  `priority` varchar(8) NOT NULL COMMENT '缺陷等级',
+  `classify` varchar(16) NOT NULL COMMENT '缺陷类型',
+  `status` varchar(8) NOT NULL COMMENT '缺陷状态',
+  `reason` varchar(16) NOT NULL COMMENT '原因分类',
+  `created` datetime NOT NULL COMMENT '创建时间',
+  `updated` datetime NOT NULL COMMENT '更新时间',
+  `reporter_name` varchar(64) NOT NULL COMMENT '报告人拼音',
+  `reporter_display_name` varchar(8) NOT NULL COMMENT '报告人中文',
+  `assignee_name` varchar(64) NOT NULL COMMENT '经办人拼音',
+  `assignee_display_name` varchar(8) NOT NULL COMMENT '经办人中文',
+  `url` varchar(64) NOT NULL COMMENT 'jira卡片地址',
+  `year` varchar(4) NOT NULL COMMENT '年',
+  `month` varchar(2) NOT NULL COMMENT '月',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+  .layui-form-label {
+    width: 150px;
+    text-align: center;
+  }
+</style>
+{% endblock %}
+
+{% block script %}
+  <script src="/static/submit.js">
+{% endblock %}
+
+{% block content %}
+<h1 style="color: red; text-align=center;">我知道有bug呀，我知道头部导航栏没有了，可我不知道原因呀？</h1>
+<div class="layui-container">
+  <form class="layui-form">
+    <table class="layui-table">
+      <colgroup>
+        <col width="10%">
+        <col width="30%">
+        <col width="30%">
+        <col width="30%">
+      </colgroup>
+      <tr>
+        <td colspan="4"><h3 style="text-align: center;">项目信息</h3></td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">项目名称</label>
+        </td>
+        <td colspan="3">
+          <input id="project" class="layui-input" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">版 本 号</label>
+        </td>
+        <td colspan="3">
+          <input id="version" class="layui-input" placeholder="例如2.1.0，没有版本号不需要填写。"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">产品经理</label>
+        </td>
+        <td>
+          <input id="pm" class="layui-input" placeholder="例如李得庆,明方林"/>
+        </td>
+        <td colspan="2">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">前端开发</label>
+        </td>
+        <td>
+          <select id="fe">
+            <input id="rd" class="layui-input" placeholder="例如李天宇,郑福坤"/>
+          </select>
+        </td>
+        <td colspan="2">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">后端开发</label>
+        </td>
+        <td>
+          <input id="rd" class="layui-input" placeholder="例如刘泽栋,王子洲"/>
+        </td>
+        <td colspan="2">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">测试人员</label>
+        </td>
+        <td>
+          <input id="rd" class="layui-input" placeholder="例如刘丽雨,姜成龙"/>
+        </td>
+        <td colspan="2">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">需求文档</label>
+        </td>
+        <td colspan="3">
+          <input id="prd" class="layui-input" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">技术文档</label>
+        </td>
+        <td colspan="3">
+          <input id="tech" class="layui-input" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <h3 style="text-align: center;">环境信息</h3>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">提测业务</label>
+        </td>
+        <td>
+          <select id="team" lay-filter="team">
+            <option value="3">基础服务</option>
+            <option value="4">保险业务</option>
+            <option value="5">财商基金</option>
+            <option value="6">保险供应链</option>
+          </select>
+        </td>
+        <td>
+<!--          <select id="sprint" lay-filter="sprint">-->
+<!--          </select>-->
+          <label class="layui-form-label">需求卡片</label>
+        </td>
+        <td>
+          <input id="demand" class="layui-input" placeholder="例如FNDN-898或http://jira.xiaobangtouzi.com/browse/FNDN-898"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">代码库</label>
+        </td>
+        <td colspan=3>
+          <textarea id="git" class="layui-textarea" placeholder="请填本次修改涉及的git仓库"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">测试地址</label>
+        </td>
+        <td colspan="3">
+          <textarea id="host" class="layui-textarea" placeholder="请填本次修改回归的qa地址"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <h3 style="text-align: center;">提测准入</h3>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">是否自测</label>
+        </td>
+        <td>
+          <input type="radio" name="selftest" value="yes" title="是" checked>
+          <input type="radio" name="selftest" value="no" title="否">
+        </td>
+        <td colspan="2">
+          <textarea id="testcase" class="layui-textarea" placeholder="请填写自测点"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">冒烟用例</label>
+        </td>
+        <td colspan="3">
+          <input id="smoke" type="checkbox" name="smoke" lay-skin="switch" lay-text="执行通过|未执行" checked>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label class="layui-form-label">影 响 面</label>
+        </td>
+        <td colspan="3">
+          <textarea id="influence" class="layui-textarea" placeholder="请填本次修改可能的影响"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <blockquote class="layui-elem-quote">提测后平台自动发送邮件给相关人员，测试完成后生成测试报告。</blockquote>
+        </td>
+        <td colspan="1" style="text-align: center;">
+          <button id="submit" type="button" class="layui-btn layui-btn layui-btn-normal">提测</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<script>
+
+  function submit() {
+    var url = "/submit/api/v1/submit/"
+    var data = {
+      'project': {
+        'name': $('#project').val(),
+        'version': $('#version').val(),
+        'pm': $('#pm').val(),
+        'fe': $('#fe').val(),
+        'rd': $('#rd').val(),
+        'qa': $('#qa').val(),
+        'prd': $('#prd').val(),
+        'tech': $('#tech').val()
+      },
+      'environment': {
+        'team': $('#team').val(),
+        'sprint': $('#sprint').val(),
+        'demand': $('#demand').val(),
+        'git': $('#git').val(),
+        'host': $('#host').val()
+      },
+      'admittance': {
+        'selftest': $("input[name='selftest']:checked").val(),
+        'testcase': $('#testcase').val(),
+        'smoke': $('#smoke').val(),
+        'influence': $('#influence').val()
+      }
+    }
+    http(url, 'POST', data, function (data) {
+      console.log(data)
+      alert("提测成功，提测编号" + data['data'])
+    }, function(data) {
+      console.log(data)
+    })
+  }
+
+  layui.use(['form'], function() {
+    var form = layui.form
+
+    form.render()
+
+    $('#submit').click(submit)
+  })
+</script>
+{% endblock %}

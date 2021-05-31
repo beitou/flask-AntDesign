@@ -1,0 +1,154 @@
+image: harbor.xiaobangtouzi.com/base/docker:kube-istio-jdk11
+
+stages:
+  - build
+  - qa
+  - staging
+  - production
+  - post-production
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+cache:
+  paths:
+    - .m2/repository
+
+build:
+  stage: build
+  script:
+    - build_image
+  when: on_success
+  only:
+    - qa@qa/quality
+    - staging@qa/quality
+    - production@qa/quality
+
+deploy to qa:
+  stage: qa
+  environment: qa
+  when: on_success
+  allow_failure: false
+  only:
+    - qa@qa/quality
+  script:
+    - deploy
+
+deploy to staging:
+  stage: staging
+  environment: staging
+  when: on_success
+  allow_failure: false
+  only:
+    - staging@qa/quality
+  script:
+    - deploy
+
+deploy to production:
+  stage: production
+  environment: production
+  when: manual
+  allow_failure: false
+  only:
+    - production@qa/quality
+  script:
+    - deploy
+
+post production:
+  stage: post-production
+  environment: production
+  when: on_success
+  allow_failure: false
+  only:
+    - production@qa/quality
+  script:
+    - merge_to_master
+
+
+.auto_devops: &auto_devops |
+  # NOTE: Auto DevOps to build_image and deploy to k8s
+  [[ "$TRACE" ]] && set -x
+  export CI_REGISTRY='harbor.xiaobangtouzi.com'
+  export CI_IMAGE_TAG=${CI_COMMIT_SHA:0:10}
+  export CI_IMAGE_PATH=$CI_REGISTRY/qa/quality
+
+  export service=quality
+
+  function registry_login() {
+    if [[ -n "$CI_REGISTRY_USER" ]]; then
+      echo "Logging to Harbor Registry with CI credentials..."
+      echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    fi
+  }
+
+  function build_image() {
+    registry_login
+
+    # NOTE: build images
+    CI_IMAGE_NAME_TAG=$CI_IMAGE_PATH:$CI_IMAGE_TAG
+    CI_IMAGE_NAME_LATEST=$CI_IMAGE_PATH:latest
+
+    CI_IMAGE_NAME=$CI_IMAGE_PATH:$CI_IMAGE_TAG
+    echo "Build $CI_IMAGE_NAME for branch $CI_COMMIT_REF_NAME"
+    echo "CURRENT PATH `pwd`"
+    docker build --tag $CI_IMAGE_NAME .
+    docker push $CI_IMAGE_NAME
+    docker rmi $CI_IMAGE_NAME
+  }
+
+  function deploy() {
+      CI_IMAGE_NAME=$CI_IMAGE_PATH:$CI_IMAGE_TAG
+      CI_DEPLOY_FILE=k8s/service-$CI_JOB_STAGE.yaml
+
+      # NOTE: deploy to kubernetes
+      sed -i -e "s/CI_IMAGE_TAG/${CI_IMAGE_TAG}/g" $CI_DEPLOY_FILE
+      sed -i -e "s/CI_JOB_STAGE/${CI_JOB_STAGE}/g" $CI_DEPLOY_FILE
+      sed -i -e "s/SERVER_NAME/${service}/g" $CI_DEPLOY_FILE
+      echo "Deploy $CI_IMAGE_NAME with $CI_DEPLOY_FILE"
+      kubectl --kubeconfig="$KUBE_CA_PEM_FILE" config use-context tx-kube-$CI_JOB_STAGE
+      kubectl --kubeconfig="$KUBE_CA_PEM_FILE" apply -f $CI_DEPLOY_FILE --record
+      kubectl --kubeconfig="$KUBE_CA_PEM_FILE" rollout status -n "$CI_JOB_STAGE" -w "deployment/$CI_PROJECT_NAME"
+  }
+
+  function merge_to_master {
+    GITLAB_HOST='https://code.xiaobangtouzi.com/api/v4/projects/'
+
+    echo "Create merge to master merge request..."
+    MR_CREATE_DATA="{ \
+      \"id\": ${CI_PROJECT_ID}, \
+      \"source_branch\": \"${CI_COMMIT_REF_NAME}\", \
+      \"target_branch\": \"master\", \
+      \"remove_source_branch\": false, \
+      \"title\": \"CI Merge: ${CI_COMMIT_REF_NAME} to master (${CI_IMAGE_TAG})\", \
+      \"assignee_id\":\"20\" \
+    }"
+    echo "curl -s -X POST \"${GITLAB_HOST}${CI_PROJECT_ID}/merge_requests\" \
+        --header \"PRIVATE-TOKEN: **************\" \
+        --header \"Content-Type: application/json\" \
+        --data \"${MR_CREATE_DATA}\""
+    MR=$(curl -s -X POST "${GITLAB_HOST}${CI_PROJECT_ID}/merge_requests" \
+        --header "PRIVATE-TOKEN: ${CIBOT_PRIVATE_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data "${MR_CREATE_DATA}")
+    MR_ID=$(echo $MR|jq '.iid')
+    echo $MR
+
+    echo "Accept merge to master merge request..."
+    MR_MERGE_DATA="{ \
+      \"id\": ${CI_PROJECT_ID}, \
+      \"merge_request_iid\": ${MR_ID} \
+    }"
+    echo "curl -s -X PUT \"${GITLAB_HOST}${CI_PROJECT_ID}/merge_requests/${MR_ID}/merge\" \
+        --header \"PRIVATE-TOKEN: **************\" \
+        --header \"Content-Type: application/json\" \
+        --data \"${MR_MERGE_DATA}\""
+    curl -s -X PUT "${GITLAB_HOST}${CI_PROJECT_ID}/merge_requests/${MR_ID}/merge" \
+        --header "PRIVATE-TOKEN: ${CIBOT_PRIVATE_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data "${MR_MERGE_DATA}" 
+    echo ""
+  }
+
+before_script:
+  - *auto_devops
+

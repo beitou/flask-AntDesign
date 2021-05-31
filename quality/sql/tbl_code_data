@@ -1,0 +1,17 @@
+CREATE TABLE `tbl_code_data` (
+  `commit_id` varchar(40) NOT NULL COMMENT 'commit id',
+  `namespace` varchar(32) NOT NULL COMMENT 'git namespace',
+  `project` varchar(64) NOT NULL COMMENT 'git project',
+  `branch` varchar(32) NOT NULL COMMENT 'git branch',
+  `created` datetime NOT NULL COMMENT '创建时间',
+  `committer` varchar(64) NOT NULL COMMENT 'git commiter',
+  `committer_email` varchar(64) NOT NULL COMMENT 'commiter email',
+  `committed_date` datetime NOT NULL COMMENT 'commiter date',
+  `additions` int(11) NOT NULL COMMENT '代码增加行数',
+  `deletions` int(11) NOT NULL COMMENT '代码增加行数',
+  `total` int(11) NOT NULL COMMENT '代码增加行数',
+  `status` varchar(8) NOT NULL COMMENT '代码提交状态',
+  `year` varchar(4) NOT NULL COMMENT '年',
+  `month` varchar(2) NOT NULL COMMENT '月',
+  PRIMARY KEY (`commit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
